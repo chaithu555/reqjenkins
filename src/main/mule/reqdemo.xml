@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="1b3c28ee-94fd-4276-99d4-1a76982c2899" >
+		<http:listener-connection host="localhost" port="8081" />
+	</http:listener-config>
+	<http:request-config name="HTTP_Request_configuration" doc:name="HTTP Request configuration" doc:id="7bebdd74-7c35-4d59-b8bd-d9308487753f" >
+		<http:request-connection host="worldtimeapi.org" />
+	</http:request-config>
+	<flow name="reqdemoFlow" doc:id="3836b62c-a7cd-474a-b5f2-1fa9bf2caafe" >
+		<http:listener doc:name="Listener" doc:id="0c5e32b9-c728-4861-b1a3-1ad80a0a797c" path="/jenkines" config-ref="HTTP_Listener_config"/>
+		<http:request method="GET" doc:name="Request" doc:id="4ed432dd-e4f5-418b-844d-4c29cb73ced5" config-ref="HTTP_Request_configuration" path="/api/timezone/Asia/Kolkata"/>
+		<ee:transform doc:name="Transform Message" doc:id="71207cad-3045-465c-a889-6992ccfb1362" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+payload]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+	</flow>
+</mule>
